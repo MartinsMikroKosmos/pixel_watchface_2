@@ -1,0 +1,574 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  "Pixel Pergament" - vintage parchment & gold watch face.
+  Bitmaps: tools/generate_assets.py, fonts: tools/generate_fonts.py
+  Fonts: parchment_time (Playfair Display, lining + tabular digits),
+         parchment_text (Libre Baskerville). Both OFL.
+-->
+<WatchFace
+    height="450"
+    width="450">
+    <Metadata
+        key="CLOCK_TYPE"
+        value="DIGITAL" />
+    <Metadata
+        key="PREVIEW_TIME"
+        value="10:09:00" />
+
+    <Scene backgroundColor="#ff000000">
+
+        <!-- ============================================================ Background -->
+        <PartImage
+            name="background"
+            height="450"
+            width="450"
+            x="0"
+            y="0">
+            <Variant
+                mode="AMBIENT"
+                target="alpha"
+                value="0" />
+            <Image resource="bg_parchment" />
+        </PartImage>
+
+
+        <!-- ============================================================ Weather -->
+        <Group
+            name="weather"
+            height="80"
+            width="200"
+            x="64"
+            y="52">
+            <Variant
+                mode="AMBIENT"
+                target="alpha"
+                value="0" />
+            <Condition>
+                <Expressions>
+                    <Expression name="noData"><![CDATA[![WEATHER.IS_AVAILABLE]]]></Expression>
+                    <Expression name="frost"><![CDATA[([WEATHER.CONDITION] == 1 || [WEATHER.CONDITION] == 8 || [WEATHER.CONDITION] == 14) && (([WEATHER.TEMPERATURE_UNIT] != 2 && [WEATHER.TEMPERATURE] <= 0) || ([WEATHER.TEMPERATURE_UNIT] == 2 && [WEATHER.TEMPERATURE] <= 32))]]></Expression>
+                    <Expression name="clear"><![CDATA[[WEATHER.CONDITION] == 1 || [WEATHER.CONDITION] == 8 || [WEATHER.CONDITION] == 14]]></Expression>
+                    <Expression name="cloudy"><![CDATA[[WEATHER.CONDITION] == 2]]></Expression>
+                    <Expression name="fog"><![CDATA[[WEATHER.CONDITION] == 3 || [WEATHER.CONDITION] == 13]]></Expression>
+                    <Expression name="heavyRain"><![CDATA[[WEATHER.CONDITION] == 4]]></Expression>
+                    <Expression name="rain"><![CDATA[[WEATHER.CONDITION] == 6 || [WEATHER.CONDITION] == 12]]></Expression>
+                    <Expression name="snow"><![CDATA[[WEATHER.CONDITION] == 5 || [WEATHER.CONDITION] == 7 || [WEATHER.CONDITION] == 11]]></Expression>
+                    <Expression name="hail"><![CDATA[[WEATHER.CONDITION] == 10]]></Expression>
+                    <Expression name="thunder"><![CDATA[[WEATHER.CONDITION] == 9]]></Expression>
+                    <Expression name="windy"><![CDATA[[WEATHER.CONDITION] == 15]]></Expression>
+                </Expressions>
+                <Compare expression="noData">
+                    <PartImage alpha="110" height="70" width="70" x="3" y="3">
+                        <Image resource="wx_cloudy" />
+                    </PartImage>
+                </Compare>
+                <Compare expression="frost">
+                    <PartImage height="70" width="70" x="3" y="3">
+                        <Image resource="wx_frost" />
+                    </PartImage>
+                </Compare>
+                <Compare expression="clear">
+                    <Condition>
+                        <Expressions>
+                            <Expression name="day"><![CDATA[[WEATHER.IS_DAY]]]></Expression>
+                            <Expression name="partly"><![CDATA[[WEATHER.CONDITION] == 14]]></Expression>
+                        </Expressions>
+                        <Compare expression="day">
+                            <Condition>
+                                <Expressions>
+                                    <Expression name="partlyDay"><![CDATA[[WEATHER.CONDITION] == 14]]></Expression>
+                                </Expressions>
+                                <Compare expression="partlyDay">
+                                    <PartImage height="70" width="70" x="3" y="3">
+                                        <Image resource="wx_partly" />
+                                    </PartImage>
+                                </Compare>
+                                <Default>
+                                    <PartImage height="70" width="70" x="3" y="3">
+                                        <Image resource="wx_sunny" />
+                                    </PartImage>
+                                </Default>
+                            </Condition>
+                        </Compare>
+                        <Default>
+                            <PartImage height="70" width="70" x="3" y="3">
+                                <Image resource="wx_night" />
+                            </PartImage>
+                        </Default>
+                    </Condition>
+                </Compare>
+                <Compare expression="cloudy">
+                    <PartImage height="70" width="70" x="3" y="3">
+                        <Image resource="wx_cloudy" />
+                    </PartImage>
+                </Compare>
+                <Compare expression="fog">
+                    <PartImage height="70" width="70" x="3" y="3">
+                        <Image resource="wx_fog" />
+                    </PartImage>
+                </Compare>
+                <Compare expression="heavyRain">
+                    <PartImage height="70" width="70" x="3" y="3">
+                        <Image resource="wx_heavy_rain" />
+                    </PartImage>
+                </Compare>
+                <Compare expression="rain">
+                    <PartImage height="70" width="70" x="3" y="3">
+                        <Image resource="wx_rain" />
+                    </PartImage>
+                </Compare>
+                <Compare expression="snow">
+                    <PartImage height="70" width="70" x="3" y="3">
+                        <Image resource="wx_snow" />
+                    </PartImage>
+                </Compare>
+                <Compare expression="hail">
+                    <PartImage height="70" width="70" x="3" y="3">
+                        <Image resource="wx_hail" />
+                    </PartImage>
+                </Compare>
+                <Compare expression="thunder">
+                    <PartImage height="70" width="70" x="3" y="3">
+                        <Image resource="wx_thunder" />
+                    </PartImage>
+                </Compare>
+                <Compare expression="windy">
+                    <PartImage height="70" width="70" x="3" y="3">
+                        <Image resource="wx_wind" />
+                    </PartImage>
+                </Compare>
+                <Default>
+                    <PartImage height="70" width="70" x="3" y="3">
+                        <Image resource="wx_partly" />
+                    </PartImage>
+                </Default>
+            </Condition>
+
+            <!-- Temperature -->
+            <Condition>
+                <Expressions>
+                    <Expression name="celsius"><![CDATA[[WEATHER.IS_AVAILABLE] && [WEATHER.TEMPERATURE_UNIT] != 2]]></Expression>
+                    <Expression name="fahrenheit"><![CDATA[[WEATHER.IS_AVAILABLE]]]></Expression>
+                </Expressions>
+                <Compare expression="celsius">
+                    <PartText height="48" width="100" x="70" y="1">
+                        <Text align="START">
+                            <Font color="#ff4a3016" family="parchment_text" size="30">
+                                <Template>%s°C<Parameter expression="[WEATHER.TEMPERATURE]" /></Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                </Compare>
+                <Compare expression="fahrenheit">
+                    <PartText height="48" width="100" x="70" y="1">
+                        <Text align="START">
+                            <Font color="#ff4a3016" family="parchment_text" size="30">
+                                <Template>%s°F<Parameter expression="[WEATHER.TEMPERATURE]" /></Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                </Compare>
+                <Default>
+                    <PartText height="48" width="100" x="70" y="1">
+                        <Text align="START">
+                            <Font color="#ff4a3016" family="parchment_text" size="30">--°</Font>
+                        </Text>
+                    </PartText>
+                </Default>
+            </Condition>
+            <!-- Condition name, localized by the system -->
+            <PartText height="24" width="112" x="70" y="48">
+                <Text align="START" ellipsis="TRUE">
+                    <Font color="#ff4a3016" family="parchment_text" size="15">
+                        <Template>%s<Parameter expression="[WEATHER.IS_AVAILABLE] ? [WEATHER.CONDITION_NAME] : &quot;&quot;" /></Template>
+                    </Font>
+                </Text>
+            </PartText>
+            <!-- tap area -->
+            <PartDraw name="tap_weather" height="80" width="170" x="0" y="0">
+                <Launch target="com.google.android.apps.weather/com.google.android.wearable.weather.pixel.ui.activity.WeatherActivity" />
+                <Rectangle height="80" width="170" x="0" y="0">
+                    <Fill color="#00000000" />
+                </Rectangle>
+            </PartDraw>
+        </Group>
+
+        <!-- ============================================================ Watch battery -->
+        <Group
+            name="watch_battery"
+            height="110"
+            width="92"
+            x="236"
+            y="20">
+            <Variant
+                mode="AMBIENT"
+                target="alpha"
+                value="0" />
+            <PartDraw height="86" width="86" x="3" y="16">
+                <!-- track: gold rim with a light inlay -->
+                <Arc centerX="43" centerY="43" height="74" width="74" startAngle="215" endAngle="505">
+                    <Stroke cap="ROUND" color="#ffc9a774" thickness="10" />
+                </Arc>
+                <Arc centerX="43" centerY="43" height="74" width="74" startAngle="215" endAngle="505">
+                    <Stroke cap="ROUND" color="#fff1e6d0" thickness="7" />
+                </Arc>
+                <!-- progress: darker gold edge + gold core -->
+                <Arc centerX="43" centerY="43" height="74" width="74" startAngle="215" endAngle="505">
+                    <Stroke cap="ROUND" color="#ff9c7038" thickness="10" />
+                    <Transform target="endAngle" value="215 + 290 * clamp([BATTERY_PERCENT], 0, 100) / 100" />
+                </Arc>
+                <Arc centerX="43" centerY="43" height="74" width="74" startAngle="215" endAngle="505">
+                    <Stroke cap="ROUND" color="#ffc79a5c" thickness="6" />
+                    <Transform target="endAngle" value="215 + 290 * clamp([BATTERY_PERCENT], 0, 100) / 100" />
+                </Arc>
+            </PartDraw>
+            <PartText height="32" width="92" x="0" y="45">
+                <Text align="CENTER">
+                    <Font color="#ff4a3016" family="parchment_text" size="20">
+                        <Template>%s%%<Parameter expression="[BATTERY_PERCENT]" /></Template>
+                    </Font>
+                </Text>
+            </PartText>
+            <PartImage height="31" width="21" x="35" y="76">
+                <Image resource="ic_watch" />
+            </PartImage>
+            <!-- tap area -->
+            <PartDraw name="tap_watch_battery" height="92" width="92" x="0" y="16">
+                <Launch target="BATTERY_STATUS" />
+                <Rectangle height="92" width="92" x="0" y="0">
+                    <Fill color="#00000000" />
+                </Rectangle>
+            </PartDraw>
+        </Group>
+
+        <!-- ============================================================ Phone battery (complication) -->
+        <Group
+            name="phone_battery"
+            height="110"
+            width="92"
+            x="318"
+            y="76">
+            <Variant
+                mode="AMBIENT"
+                target="alpha"
+                value="0" />
+            <PartDraw height="86" width="86" x="3" y="16">
+                <Arc centerX="43" centerY="43" height="74" width="74" startAngle="215" endAngle="505">
+                    <Stroke cap="ROUND" color="#ffc9a774" thickness="10" />
+                </Arc>
+                <Arc centerX="43" centerY="43" height="74" width="74" startAngle="215" endAngle="505">
+                    <Stroke cap="ROUND" color="#fff1e6d0" thickness="7" />
+                </Arc>
+            </PartDraw>
+            <PartImage height="33" width="19" x="36" y="75">
+                <Image resource="ic_phone" />
+            </PartImage>
+        </Group>
+
+        <!-- Phone battery complication: must be a direct child of Scene to be editable -->
+        <ComplicationSlot
+            displayName="@string/phone_battery"
+            height="86"
+            isCustomizable="TRUE"
+            slotId="0"
+            supportedTypes="RANGED_VALUE SHORT_TEXT"
+            width="86"
+            x="321"
+            y="92">
+            <Variant
+                mode="AMBIENT"
+                target="alpha"
+                value="0" />
+            <DefaultProviderPolicy
+                defaultSystemProvider="EMPTY"
+                defaultSystemProviderType="SHORT_TEXT"
+                primaryProvider="fr.thema.wear.watch.complication.phone/fr.thema.wear.watch.complication.phone.MobileBatteryComplicationService"
+                primaryProviderType="RANGED_VALUE" />
+            <BoundingOval height="86" width="86" x="0" y="0" />
+            <Complication type="RANGED_VALUE">
+                <PartDraw height="86" width="86" x="0" y="0">
+                    <Arc centerX="43" centerY="43" height="74" width="74" startAngle="215" endAngle="505">
+                        <Stroke cap="ROUND" color="#ff9c7038" thickness="10" />
+                        <Transform
+                            target="endAngle"
+                            value="215 + 290 * clamp(([COMPLICATION.RANGED_VALUE_VALUE] - [COMPLICATION.RANGED_VALUE_MIN]) / ([COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN] == 0 ? 1 : [COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]), 0, 1)" />
+                    </Arc>
+                    <Arc centerX="43" centerY="43" height="74" width="74" startAngle="215" endAngle="505">
+                        <Stroke cap="ROUND" color="#ffc79a5c" thickness="6" />
+                        <Transform
+                            target="endAngle"
+                            value="215 + 290 * clamp(([COMPLICATION.RANGED_VALUE_VALUE] - [COMPLICATION.RANGED_VALUE_MIN]) / ([COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN] == 0 ? 1 : [COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]), 0, 1)" />
+                    </Arc>
+                </PartDraw>
+                <PartText height="32" width="86" x="0" y="28">
+                    <Text align="CENTER">
+                        <Font color="#ff4a3016" family="parchment_text" size="20">
+                            <Template>%s%%<Parameter expression="round([COMPLICATION.RANGED_VALUE_VALUE])" /></Template>
+                        </Font>
+                    </Text>
+                </PartText>
+            </Complication>
+            <Complication type="SHORT_TEXT">
+                <PartText height="32" width="86" x="0" y="28">
+                    <Text align="CENTER">
+                        <Font color="#ff4a3016" family="parchment_text" size="20">
+                            <Template>%s<Parameter expression="[COMPLICATION.TEXT]" /></Template>
+                        </Font>
+                    </Text>
+                </PartText>
+            </Complication>
+        </ComplicationSlot>
+
+        <!-- ============================================================ Date -->
+        <PartText
+            name="date"
+            height="38"
+            width="350"
+            x="50"
+            y="144">
+            <Variant
+                mode="AMBIENT"
+                target="alpha"
+                value="0" />
+            <Text align="CENTER">
+                <Font color="#ff4a3016" family="parchment_text" size="24">
+                    <Upper>
+                        <Template>%s<Parameter expression="icuText(&quot;EEEEEE, d. MMM&quot;)" /></Template>
+                    </Upper>
+                </Font>
+            </Text>
+        </PartText>
+        <PartText
+            name="date_ambient"
+            alpha="0"
+            height="38"
+            width="350"
+            x="50"
+            y="144">
+            <Variant
+                mode="AMBIENT"
+                target="alpha"
+                value="255" />
+            <Text align="CENTER">
+                <Font color="#ff9c8466" family="parchment_text" size="24">
+                    <Upper>
+                        <Template>%s<Parameter expression="icuText(&quot;EEEEEE, d. MMM&quot;)" /></Template>
+                    </Upper>
+                </Font>
+            </Text>
+        </PartText>
+
+        <!-- ============================================================ Time -->
+        <!-- engraved look: soft dark shadow underneath, gold digits with a dark rim on top -->
+        <PartText
+            name="time_shadow"
+            height="130"
+            width="400"
+            x="25"
+            y="151">
+            <Variant
+                mode="AMBIENT"
+                target="alpha"
+                value="0" />
+            <Text align="CENTER">
+                <Font color="#00000000" family="parchment_time" size="88">
+                    <Shadow color="#8a5a2a10" offsetX="1.5" offsetY="2.5" radius="3">
+                        <Template>%s:%s
+                            <Parameter expression="[IS_24_HOUR_MODE] ? [HOUR_0_23_Z] : [HOUR_1_12]" />
+                            <Parameter expression="[MINUTE_Z]" />
+                        </Template>
+                    </Shadow>
+                </Font>
+            </Text>
+        </PartText>
+        <PartText
+            name="time"
+            height="130"
+            width="400"
+            x="25"
+            y="151">
+            <Variant
+                mode="AMBIENT"
+                target="alpha"
+                value="0" />
+            <Text align="CENTER">
+                <Font color="#ffdcb77e" family="parchment_time" size="88">
+                    <Outline color="#ff5e3c14" width="1.6">
+                        <Template>%s:%s
+                            <Parameter expression="[IS_24_HOUR_MODE] ? [HOUR_0_23_Z] : [HOUR_1_12]" />
+                            <Parameter expression="[MINUTE_Z]" />
+                        </Template>
+                    </Outline>
+                </Font>
+            </Text>
+        </PartText>
+        <!-- Ambient: outline only, very few lit pixels -->
+        <PartText
+            name="time_ambient"
+            alpha="0"
+            height="130"
+            width="400"
+            x="25"
+            y="151">
+            <Variant
+                mode="AMBIENT"
+                target="alpha"
+                value="255" />
+            <Text align="CENTER">
+                <Font color="#ff3a2a14" family="parchment_time" size="88">
+                    <Outline color="#ffc8a46c" width="1.5">
+                        <Template>%s:%s
+                            <Parameter expression="[IS_24_HOUR_MODE] ? [HOUR_0_23_Z] : [HOUR_1_12]" />
+                            <Parameter expression="[MINUTE_Z]" />
+                        </Template>
+                    </Outline>
+                </Font>
+            </Text>
+        </PartText>
+
+        <!-- AM / PM, only in 12h mode; follows the right edge of the (tabular) time -->
+        <Condition>
+            <Expressions>
+                <Expression name="oneDigit"><![CDATA[![IS_24_HOUR_MODE] && [HOUR_1_12] < 10]]></Expression>
+                <Expression name="twoDigits"><![CDATA[![IS_24_HOUR_MODE]]]></Expression>
+            </Expressions>
+            <Compare expression="oneDigit">
+                <PartText name="ampm" height="29" width="50" x="323" y="232">
+                    <Variant mode="AMBIENT" target="alpha" value="150" />
+                    <Text align="START">
+                        <Font color="#ff6e4a1c" family="parchment_text" size="18">
+                            <Template>%s<Parameter expression="[AMPM_STRING]" /></Template>
+                        </Font>
+                    </Text>
+                </PartText>
+            </Compare>
+            <Compare expression="twoDigits">
+                <PartText name="ampm" height="29" width="50" x="350" y="232">
+                    <Variant mode="AMBIENT" target="alpha" value="150" />
+                    <Text align="START">
+                        <Font color="#ff6e4a1c" family="parchment_text" size="18">
+                            <Template>%s<Parameter expression="[AMPM_STRING]" /></Template>
+                        </Font>
+                    </Text>
+                </PartText>
+            </Compare>
+        </Condition>
+
+        <!-- ============================================================ Steps -->
+        <Group
+            name="steps"
+            height="157"
+            width="157"
+            x="58"
+            y="262">
+            <Variant
+                mode="AMBIENT"
+                target="alpha"
+                value="0" />
+            <PartImage height="157" width="157" x="0" y="0">
+                <Image resource="med_steps" />
+            </PartImage>
+            <PartText height="42" width="157" x="0" y="52">
+                <Text align="CENTER">
+                    <Font color="#ff4a3016" family="parchment_text" size="26">
+                        <Template>%s<Parameter expression="numberFormat(&quot;#,##0&quot;, [STEP_COUNT])" /></Template>
+                    </Font>
+                </Text>
+            </PartText>
+            <PartText height="24" width="157" x="0" y="88">
+                <Text align="CENTER">
+                    <Font color="#ff4a3016" family="parchment_text" size="15">
+                        <Template>/ %sK Schritte<Parameter expression="round(([STEP_GOAL] &lt; 1 ? 10000 : [STEP_GOAL]) / 1000)" /></Template>
+                    </Font>
+                </Text>
+            </PartText>
+            <!-- tap area -->
+            <PartDraw name="tap_steps" height="157" width="157" x="0" y="0">
+                <Launch target="com.fitbit.FitbitMobile/com.google.android.wearable.fitbit.mainapp.today.TodayMainActivity" />
+                <Ellipse height="145" width="145" x="6" y="6">
+                    <Fill color="#00000000" />
+                </Ellipse>
+            </PartDraw>
+        </Group>
+
+        <!-- ============================================================ Heart rate -->
+        <Group
+            name="heart_rate"
+            height="157"
+            width="157"
+            x="236"
+            y="262">
+            <Variant
+                mode="AMBIENT"
+                target="alpha"
+                value="0" />
+            <PartImage height="157" width="157" x="0" y="0">
+                <Image resource="med_heart" />
+            </PartImage>
+            <!-- heart, value and unit are positioned as one centred row -->
+            <Condition>
+                <Expressions>
+                    <Expression name="noHr"><![CDATA[[HEART_RATE] <= 0]]></Expression>
+                    <Expression name="threeDigits"><![CDATA[[HEART_RATE] >= 100]]></Expression>
+                </Expressions>
+                <Compare expression="noHr">
+                    <PartImage height="25" width="26" x="26" y="86">
+                        <Image resource="ic_heart_small" />
+                    </PartImage>
+                    <PartText height="38" width="60" x="55" y="81">
+                        <Text align="START">
+                            <Font color="#ff4a3016" family="parchment_text" size="24">--</Font>
+                        </Text>
+                    </PartText>
+                    <PartText height="24" width="50" x="88" y="91">
+                        <Text align="START">
+                            <Font color="#ff4a3016" family="parchment_text" size="15">BPM</Font>
+                        </Text>
+                    </PartText>
+                </Compare>
+                <Compare expression="threeDigits">
+                    <PartImage height="25" width="26" x="18" y="86">
+                        <Image resource="ic_heart_small" />
+                    </PartImage>
+                    <PartText height="38" width="60" x="47" y="81">
+                        <Text align="START">
+                            <Font color="#ff4a3016" family="parchment_text" size="24">
+                                <Template>%s<Parameter expression="round([HEART_RATE])" /></Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                    <PartText height="24" width="50" x="94" y="91">
+                        <Text align="START">
+                            <Font color="#ff4a3016" family="parchment_text" size="15">BPM</Font>
+                        </Text>
+                    </PartText>
+                </Compare>
+                <Default>
+                    <PartImage height="25" width="26" x="26" y="86">
+                        <Image resource="ic_heart_small" />
+                    </PartImage>
+                    <PartText height="38" width="60" x="55" y="81">
+                        <Text align="START">
+                            <Font color="#ff4a3016" family="parchment_text" size="24">
+                                <Template>%s<Parameter expression="round([HEART_RATE])" /></Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                    <PartText height="24" width="50" x="88" y="91">
+                        <Text align="START">
+                            <Font color="#ff4a3016" family="parchment_text" size="15">BPM</Font>
+                        </Text>
+                    </PartText>
+                </Default>
+            </Condition>
+            <!-- tap area -->
+            <PartDraw name="tap_heart_rate" height="157" width="157" x="0" y="0">
+                <Launch target="HEALTH_HEART_RATE" />
+                <Ellipse height="145" width="145" x="6" y="6">
+                    <Fill color="#00000000" />
+                </Ellipse>
+            </PartDraw>
+        </Group>
+
+    </Scene>
+</WatchFace>
