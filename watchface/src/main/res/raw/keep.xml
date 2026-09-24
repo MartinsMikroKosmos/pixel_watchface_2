@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Watch Face Format resources are only referenced from XML the shrinker cannot see -->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@raw/watchface,@xml/*,@drawable/*,@string/*,@font/*" />

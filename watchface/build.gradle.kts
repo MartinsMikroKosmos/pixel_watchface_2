@@ -1,15 +1,23 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
 }
 
+// Upload key for Google Play, kept outside of git (see keystore.properties.example)
+val keystoreProperties = Properties().apply {
+    val file = rootProject.file("keystore.properties")
+    if (file.exists()) file.inputStream().use { load(it) }
+}
+
 android {
-    namespace = "com.example.pixel_watchface_2"
+    namespace = "de.martinsmikrokosmos.pergament"
     compileSdk {
         version = release(37)
     }
 
     defaultConfig {
-        applicationId = "com.example.pixel_watchface_2"
+        applicationId = "de.martinsmikrokosmos.pergament"
         minSdk = 34
         targetSdk = 37
         versionCode = 1
@@ -17,10 +25,23 @@ android {
 
     }
 
+    signingConfigs {
+        if (keystoreProperties.isNotEmpty()) {
+            create("upload") {
+                storeFile = file(keystoreProperties.getProperty("storeFile"))
+                storePassword = keystoreProperties.getProperty("storePassword")
+                keyAlias = keystoreProperties.getProperty("keyAlias")
+                keyPassword = keystoreProperties.getProperty("keyPassword")
+            }
+        }
+    }
+
     buildTypes {
         release {
+            signingConfigs.findByName("upload")?.let { signingConfig = it }
+            // R8 strips the generated R class: watch faces must not contain dex files
             optimization {
-                enable = false
+                enable = true
             }
         }
     }

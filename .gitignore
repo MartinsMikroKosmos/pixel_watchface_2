@@ -13,3 +13,8 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Play upload key
+keystore.properties
+*.jks
+*.keystore
